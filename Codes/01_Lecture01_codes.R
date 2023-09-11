@@ -7,7 +7,8 @@ student_mon = read.xlsx(xlsxFile = "Data/student_list.xlsx", sheet = 1)
 N = nrow(student_mon)
 n = 6
 
-# repeat
-sample_index = sample(N, n)
+# could repeat the below steps
+sample_index = sample(1:N, 4)
 #sample_index = sample(student_mon$index, n)
 student_mon[sample_index,]
+
