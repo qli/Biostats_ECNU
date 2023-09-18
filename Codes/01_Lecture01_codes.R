@@ -12,3 +12,8 @@ sample_index = sample(1:N, 4)
 #sample_index = sample(student_mon$index, n)
 student_mon[sample_index,]
 
+student_wed = read.xlsx(xlsxFile = "Data/student_list.xlsx", sheet = 2)
+N = nrow(student_wed)
+n = 2
+sample_index = sample(1:N, n)
+student_wed[sample_index,]
