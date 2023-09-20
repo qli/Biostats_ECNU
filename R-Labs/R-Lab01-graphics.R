@@ -72,10 +72,7 @@ stripchart(Sepal.Width ~ Species, data = iris,
 # Calculating the means
 means <- sapply(levels(factor(iris$Species)), function(i) mean(iris$Sepal.Width[iris$Species == i]))
 
-stripchart(Sepal.Width ~ Species, data = iris,pch = 1, vertical=TRUE, method = 'jitter')
-# add mean values
-points(means, col = "red", pch = 2, cex = 1.5, bg = 2, lwd = 2)
-
+means <- sapply(levels(factor(iris$Species)), function(i) mean(iris$Sepal.Width[iris$Species == i]))
 # 3.2 boxplot
 
 boxplot(Sepal.Width ~ Species, data = iris)
