@@ -40,9 +40,9 @@ sd(bodymass_CUTTHROA) # 1.240112 --> 1.2
 sd(bodymass_WB_SPARW) # 3.108456 --> 3.1
 
 # calculate CV
-sd(bodymass_CRU_WAXB) / mean(bodymass_CRU_WAXB) # 0.08 or 0.1
-sd(bodymass_CUTTHROA) / mean(bodymass_CUTTHROA) # 0.08 or 0.1
-sd(bodymass_WB_SPARW) / mean(bodymass_WB_SPARW) # 0.08 or 0.1
+sd(bodymass_CRU_WAXB) / mean(bodymass_CRU_WAXB) * 100 # 8.29%
+sd(bodymass_CUTTHROA) / mean(bodymass_CUTTHROA) * 100 # 8.04%
+sd(bodymass_WB_SPARW) / mean(bodymass_WB_SPARW) * 100 # 8.19%
 
 boxplot(finch$mass ~ finch$species,  boxwex = 0.2,
         xlab="Species", ylab="Body mass (g)")
