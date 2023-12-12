@@ -38,6 +38,8 @@ pTooTall <- 1 - pnorm(190.5, mean = 163.2, sd = 10.1)
 pTooShort + pTooTall
 ## [1] 0.2896919
 
+pnorm(X, mean=mu, sd=sigma)
+
 #--------------------------------------
 # 2. generate a normal distribution: rnorm(n, mean=0, sd=1)
 women_height = rnorm(n = 1000, mean = 163.2, sd = 10.1)
@@ -89,6 +91,11 @@ ggplot(heat, aes(x = temperature)) +
 
 t.test(heat$temperature, mu = 98.6)
 
+temp_test = t.test(heat$temperature, mu = 98.6)
+temp_test$p.value
+temp_test$estimate
+temp_test$conf.int
+
 # One Sample t-test
 # 
 # data:  heat$temperature
@@ -102,6 +109,7 @@ t.test(heat$temperature, mu = 98.6)
 
 #--------------------------------------
 # t-test: Example 11.3. Body temperature with a larger sample n = 130
+set.seed(123)
 temp_new = rnorm(n = 130, mean = 98.25, sd = 0.733)
 hist(temp_new)
 mean(temp_new) # some difference
