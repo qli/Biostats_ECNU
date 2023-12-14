@@ -5,13 +5,14 @@
 install.packages("emmeans", dependencies = TRUE) # only if not yet installed
 
 library(ggplot2)
-library(dplyr)
+library(dplyr) # %>%
 
 #------------------------------------------------------------------------
 # Example 15.1. Knees who say night
 # Analysis of variance, comparing phase shift in the circadian rhythm of melatonin production in participants given alternative light treatments. Also, the nonparametric Kruskal-Wallis test. Finally, we use the same data to demonstrate planned comparisons and unplanned comparisons (Tukey-Kramer tests).
 
 #circadian <- read.csv(url("https://whitlockschluter3e.zoology.ubc.ca/Data/chapter15/chap15e1KneesWhoSayNight.csv"), stringsAsFactors = FALSE)
+
 circadian <- read.csv("R-Labs/chap15e1KneesWhoSayNight.csv")
 
 # Order groups
@@ -25,6 +26,12 @@ circadianStats <- summarize(group_by(circadian, treatment),
                             Ybar = mean(shift, na.rm = TRUE),
                             s = sd(shift, na.rm = TRUE), 
                             n = n())
+
+circadian %>% group_by(treatment) %>% 
+    summarise(Ybar = mean(shift, na.rm = TRUE),
+              s = sd(shift, na.rm = TRUE), 
+              n = n())
+
 data.frame(circadianStats)
 
 # Basic strip chart
@@ -110,7 +117,6 @@ circadianUnplanned
 
 # walkingstick <- read.csv(url("https://whitlockschluter3e.zoology.ubc.ca/Data/chapter15/chap15e6WalkingStickFemurs.csv"), stringsAsFactors = FALSE)
 walkingstick <- read.csv("R-Labs/chap15e6WalkingStickFemurs.csv")
-
 head(walkingstick)
 
 # Strip chart
@@ -125,6 +131,9 @@ head(data.frame(walkingstick))
 
 # plot
 walkingstick.ordered <- arrange(walkingstick, meanFemur)
+#walkingstick.ordered <- walkingstick %>% 
+#    arrange(desc(meanFemur))
+
 walkingstick.ordered$indiv <- rep(1:25, rep(2, 25))
 
 ggplot(walkingstick.ordered, aes(indiv, femurLength)) +
