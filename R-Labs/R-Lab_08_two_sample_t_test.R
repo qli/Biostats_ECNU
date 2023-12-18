@@ -111,6 +111,18 @@ ggplot(data=lizard[lizard$Survival=="living",],
     theme_classic()
 
 
+# scatter plot
+
+ggplot(lizard, aes(x = Survival, y = squamosalHornLength)) + 
+    geom_point(color = "firebrick", size = 3, shape = 1) +
+    stat_summary(fun.data = mean_se, geom = "errorbar", 
+                 colour = "black", width = 0.05, 
+                 position=position_nudge(x = 0.15)) +
+    stat_summary(fun.y = mean, geom = "point", 
+                 colour = "firebrick", size = 3, 
+                 position=position_nudge(x = 0.15)) +
+    labs(x = "Feeding status", y = "Horn length (mm)") + 
+    theme_classic()
 
 # Two-sample t-test
 lizard_model <- t.test(squamosalHornLength ~ Survival, data = lizard, var.equal = TRUE)
