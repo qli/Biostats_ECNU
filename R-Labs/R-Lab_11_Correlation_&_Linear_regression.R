@@ -13,28 +13,40 @@
 
 # Read and inspect data
 #booby <- read.csv(url("https://whitlockschluter3e.zoology.ubc.ca/Data/chapter16/chap16e1FlippingBird.csv"), stringsAsFactors = FALSE)
+
 booby <- read.csv("R-Labs/chap16e1FlippingBird.csv")
 head(booby)
 
+library(ggplot2)
 # Scatter plot
-ggplot(booby, aes(nVisitsNestling, futureBehavior)) + 
-    geom_point(size = 3, col = "firebrick") + 
-    labs(x = "Events experienced while a nestling", y = "Future behavior") + 
+ggplot(data=booby, aes(x=nVisitsNestling, y=futureBehavior)) + 
+    geom_point(size = 3, col = "blue", pch=7) + 
+    labs(x = "Events experienced while a nestling", 
+         y = "Future behavior") + 
     theme_classic()
 
 # Correlation coefficient
 # The cor.test function computes a number of useful quantities, which we save in the object boobyCor. The quantities can be extracted one at a time or shown all at once. We show the formula method here.
 
 boobyCor <- cor.test(~ futureBehavior + nVisitsNestling, data = booby)
+boobyCor <- cor.test(~ booby$futureBehavior + booby$nVisitsNestling)
 boobyCor
 
+xy_sum = sum( (booby$nVisitsNestling - mean(booby$nVisitsNestling)) * (booby$futureBehavior - mean(booby$futureBehavior)))
+x_sum = sum((booby$nVisitsNestling - mean(booby$nVisitsNestling))^2)
+y_sum = sum((booby$futureBehavior - mean(booby$futureBehavior))^2)
+booby_r = xy_sum / (sqrt(x_sum) * sqrt(y_sum))
+
+r = booby_r
 SE <- sqrt( (1 - r^2)/(nrow(booby) - 3) )
 unname(SE)
+sqrt( (1 - round(r,4)^2)/(nrow(booby) - 3) )
 
 # Confidence interval
 # The 95% confidence interval for the correlation is included in the output of cor.test. It can be extracted from the boobyCor calculated in an earlier step.
 
 boobyCor$conf.int
+boobyCor$estimate
 
 #------------------------------------------------------------
 # Spearman rank correlation
@@ -56,7 +68,8 @@ ggplot(trick, aes(years, impressivenessScore)) +
 # Spearman’s rank correlation
 # The correlation is part of the output of the cor.test() function. See the next section for the result.
 
-cor.test(~ years + impressivenessScore, data = trick, method = "spearman")
+score_test <- cor.test(~ years + impressivenessScore, data = trick, method = "spearman")
+score_test$estimate
 
 # In this example, the variable impressivenessScore is a number score with lots of tied observations. Because of the ties, R will warn you that the P-value in the output is not exact.
 
@@ -69,7 +82,7 @@ cor.test(~ years + impressivenessScore, data = trick, method = "spearman")
 
 
 #------------------------------------------------------------
-# Spearman rank correlation
+# Linear regression
 #------------------------------------------------------------
 
 # Example 17.1. Lion noses
@@ -87,6 +100,7 @@ ggplot(lion, aes(proportionBlack, ageInYears)) +
     geom_point(size = 3, col = "firebrick") + 
     labs(x = "Proportion black", y = "Age (years)") + 
     theme_classic()
+    #theme_bw()
 
 # Fit regression line
 # Fit the linear regression to the data using least squares. Use lm(), which was also used for ANOVA. Save the results into a model object, and then use other commands to extract the quantities wanted.
@@ -96,8 +110,9 @@ lionRegression <- lm(ageInYears ~ proportionBlack, data = lion)
 # Slope and intercept of the best fit line, along with their standard errors, are extracted with the summary() function. Extract just the coefficients with coef(lionRegression).
 
 summary(lionRegression)
+summary(lionRegression)$r.square
 
-# 95& CI for intercept and slope
+# 95% CI for intercept and slope
 confint(lionRegression)
 
 # Add line to scatter plot
@@ -105,15 +120,20 @@ confint(lionRegression)
 
 ggplot(lion, aes(proportionBlack, ageInYears)) + 
     geom_point(size = 3, col = "firebrick") + 
-    geom_smooth(method = "lm", se = FALSE, col = "black") +
+    #geom_smooth(method = "lm", se = FALSE, col = "black") +
+    geom_smooth(method = "lm", se = T, col = "black") +
     labs(x = "Proportion black", y = "Age (years)") + 
     theme_classic()
 
 # Use line to predict
 # Use the regression line for prediction. For example, here is how to predict mean lion age corresponding to a value of 0.50 of proportion black in the nose.
 
+predict()
+
 yhat <- predict(lionRegression, data.frame(proportionBlack = 0.50), se.fit = TRUE)
 data.frame(yhat)
+
+predict(lionRegression)
 
 # 95% confidence bands
 # The 95% confidence bands measure uncertainty of the predicted mean values on the regression line corresponding to each x-value (Figure 17.2-1, left). The confidence limits are the upper and lower edge of the shaded area in the following plot.
@@ -139,6 +159,8 @@ plot(lionRegression, which = 1)
 # plot(lionRegression)
 
 lion$residuals <- residuals(lionRegression)
+lion$yhat <- predict(lionRegression)
+
 ggplot(lion, aes(ageInYears, residuals)) + 
     geom_point(size = 3, col = "firebrick") + 
     geom_hline(yintercept=0, color = "black") +
