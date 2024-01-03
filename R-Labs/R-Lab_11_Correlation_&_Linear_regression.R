@@ -128,12 +128,12 @@ ggplot(lion, aes(proportionBlack, ageInYears)) +
 # Use line to predict
 # Use the regression line for prediction. For example, here is how to predict mean lion age corresponding to a value of 0.50 of proportion black in the nose.
 
-predict()
+# predict(model, data.frame(x=?))
 
 yhat <- predict(lionRegression, data.frame(proportionBlack = 0.50), se.fit = TRUE)
 data.frame(yhat)
 
-predict(lionRegression)
+predict(lionRegression) # predicted values for all X in the data
 
 # 95% confidence bands
 # The 95% confidence bands measure uncertainty of the predicted mean values on the regression line corresponding to each x-value (Figure 17.2-1, left). The confidence limits are the upper and lower edge of the shaded area in the following plot.
@@ -158,8 +158,9 @@ summary(lionRegression)$r.squared
 plot(lionRegression, which = 1)
 # plot(lionRegression)
 
-lion$residuals <- residuals(lionRegression)
 lion$yhat <- predict(lionRegression)
+lion$residuals <- residuals(lionRegression)
+
 
 ggplot(lion, aes(ageInYears, residuals)) + 
     geom_point(size = 3, col = "firebrick") + 
